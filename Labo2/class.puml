@@ -1,0 +1,60 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Utilisateur{
+    - nom: String
+    - email: String
+    - motDePasse: String
+    - 2FA: boolean
+}
+
+class Admin extends Utilisateur {
+}
+
+class Concert {
+    - date: Date
+    - heure: Heure
+    - salle: Salle
+    - artistes: Artiste[]
+    - prixTicket: double
+}
+
+class Ticket {
+    - codeUnique: int
+    -prixTicket:double
+}
+
+class Paiement {
+    - paye: boolean
+}
+class Salle{
+}
+class Place{
+    - numero: int
+}
+class Commande{
+    - tickets[]: Ticket
+    - total: double
+}
+class CarteBancaire extends Paiement {}
+class Paypal extends Paiement {}
+class Artiste {}
+class Mail {}
+
+note "Les tickets sont disponibles si il reste encore des places pour un concert" AS N1
+
+N1 .. Ticket
+Utilisateur "1" -- "0..*" Concert : regarde >
+Commande "1" -- "0..*" Ticket : commande >
+Utilisateur "1" -- "0..*" Commande : realise >
+Paiement "0..*" -- "1" Commande : procede <
+Admin "1" -- "0..*" Concert : gere >
+Concert "1" -- "1" Salle : a lieu >
+Salle "1" *-- "1..*" Place : contient >
+Ticket "1*" -- "1" Place : est pour >
+Concert "1" -- "1..*" Artiste : < participe
+Ticket "1..*" -- "1" Concert : concerne >
+Paiement "1" -- "1" Mail : genere >
+
+
+@enduml

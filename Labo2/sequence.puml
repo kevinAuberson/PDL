@@ -1,0 +1,42 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+participant ":Concert" as Concert order 10
+participant ":Utilisateur" as Utilisateur
+participant ":Commande" as Commande
+participant "tickets[i]:Ticket" as Ticket order 5
+participant ":Mail" as Mail order 40
+participant ":Paiement" as Paiement order 30
+
+[o-> Utilisateur : Créer un compte
+Activate Utilisateur
+Utilisateur -> Concert : consulte
+Activate Concert
+
+Utilisateur -> Commande: commander()
+Activate Commande
+loop
+    Commande -> Ticket : getPrix()
+    Activate Ticket
+    Ticket -> Concert : prixTicket = getPrix()
+    Ticket --> Commande : total += prixTicket
+end
+
+Commande -> Paiement : effectuerPaiement(total)
+Activate Paiement
+
+Paiement -> Paiement: paye = transaction()
+Activate Paiement
+Deactivate Paiement
+
+opt paye
+Paiement --> Mail : Mail(this)
+Activate Mail
+
+Mail -> Mail : envoyerMail()
+Activate Mail
+Deactivate Mail
+
+end
+
+@enduml

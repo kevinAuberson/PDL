@@ -1,0 +1,27 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+actor utilisateur as u
+actor administrateur as a
+actor systemBanque as sb
+actor serveurAuthentification as sa
+
+rectangle vente_billet_concert {
+    u <|-right- a
+    u -- (créer un compte)
+    (créer un compte) -- sa
+    u -- (se connecter)
+    (se connecter) -- sa
+    (se connecter) <.left. (2FA) : <<extend>>
+    u -up- (consulter liste des concerts et informations)
+    u -- (commander billet)
+    (commander billet) ..> (vérifier disponibilité) : <<include>>
+    (commander billet) ..> (payer les billets) : <<include>>
+    (commander billet) .left.> (envoyer confirmation) : <<include>>
+    (payer les billets) -- sb
+    (payer les billets) <|-- (carte bancaire)
+    (payer les billets) <|-- (paypal)
+    a -- (modifier informations concerts)
+}
+
+@enduml

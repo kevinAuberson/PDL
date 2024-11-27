@@ -1,0 +1,20 @@
+@startuml
+title Diagramme de machine à états de l'ascenseur
+opérationel -> Dysfonctionnement : Dysfonctionnement détecté
+Dysfonctionnement -down-> [*] : Bouton d'urgence appuyé
+state opérationel {
+[*] -down-> ArrêtéAvecPortesFermées : Mise en fonction
+ArrêtéAvecPortesFermées -down-> EnDéplacement : Bouton d'étage appuyé (extérieur)
+ArrêtéAvecPortesFermées -down-> EnDéplacement : Bouton d'étage appuyé (intérieur)
+OuvertureDesPortes --> ArrêtéAvecPortesOuvertes : Ouverture des portes terminée
+ArrêtéAvecPortesOuvertes -left-> FermetureDesPortes : Aucune action pendant une minute
+ArrêtéAvecPortesOuvertes --> FermetureDesPortes : Bouton fermeture des portes appuyé
+OuvertureDesPortes -down-> FermetureDesPortes : Bouton fermeture des portes appuyé
+OuvertureDesPortes <-right- FermetureDesPortes : Bouton ouverture des portes appuyé
+FermetureDesPortes --> ArrêtéAvecPortesFermées : Retour état initial
+EnDéplacement --> Arrêt : Capteur d'étage activé
+Arrêt --> OuvertureDesPortes : Ouverture Automatique
+Dysfonctionnement -up-> [H] : Bouton d'étage appuyé (intérieur)
+}
+@enduml
+
